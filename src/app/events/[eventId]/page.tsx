@@ -7,6 +7,7 @@ import { useParams } from "next/navigation";
 
 import Clock from "../../../components/Clock";
 import ProductIntro from "../../../components/ProductIntro";
+import { Button } from "@mui/material";
 import { CircularProgress } from "@mui/material";
 import type { CircularProgressProps } from "@mui/material";
 import Box from "@mui/material/Box";
@@ -59,6 +60,7 @@ function EventsIdPage() {
   const params = useParams();
   const [dbEvent, setDbEvent] = useState<eventDetailDto | null>(null);
   const [withdrawRate, setWithdrawRate] = useState<number>(0);
+  // const [oppositionRate, setOppositionRate] = useState<number>(0);
   const { data: oppositionRate } = useContractRead({
     address: dbEvent?.eventAddress as `0x${string}`,
     abi: PoolABI,
@@ -143,7 +145,7 @@ function EventsIdPage() {
               </div>
               <div className="ml-5">
                 <p className=" mb-2 text-lg font-bold">{"Opposition Rate"}</p>
-                <CircularProgressWithLabel value={Number(oppositionRate)} />
+                <CircularProgressWithLabel value={Number(oppositionRate)<100 ? Number(oppositionRate) : 100} />
               </div>
             </div>
             <p className="p-2 text-xl font-bold">{`Total Vault : ${dbEvent?.currency}$ ${dbEvent?.currentValue}`}</p>
@@ -152,10 +154,19 @@ function EventsIdPage() {
                 dbEvent.startDate,
               )} – ${formatTimestamp(dbEvent.endDate)}`}
             </p>
-            <VoteDialog
-              poolAddress={dbEvent.eventAddress}
-              onRefresh={refreshData}
-            />
+            {Number(oppositionRate) > 0 ? (
+              <Button 
+              className="w-30 m-4 flex h-10 items-center justify-center rounded-2xl bg-dark-blue p-4 pb-2 pb-2 pt-2 pt-2 text-xl font-bold text-white hover:bg-light-blue"
+              >
+                {" "}
+                Withdraw
+              </Button>
+            ) : (
+              <VoteDialog
+                poolAddress={dbEvent.eventAddress}
+                onRefresh={refreshData}
+              />
+            )}
           </div>
         )}
       </div>
