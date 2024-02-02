@@ -160,7 +160,7 @@ function FundDialog({
         autoHideDuration={6000}
         onClose={handleSSClose}
       >
-        <Alert onClose={handleClose} severity="success" sx={{ width: "100%" }}>
+        <Alert onClose={handleSSClose} severity="success" sx={{ width: "100%" }}>
           Mint NFT success!
         </Alert>
       </Snackbar>

@@ -5,12 +5,13 @@ import React from "react";
 
 import { useParams } from "next/navigation";
 
-import { DialogTitle } from "@mui/material";
+import { DialogTitle, Alert } from "@mui/material";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import InputLabel from "@mui/material/InputLabel";
 import TextField from "@mui/material/TextField";
+import Snackbar from "@mui/material/Snackbar";
 import { useAccount, useContractWrite, usePrepareContractWrite } from "wagmi";
 
 import { PoolFactoryABI } from "@/utils/abis/PoolFactory";
@@ -32,6 +33,7 @@ interface NFTDialogProps {
 
 function GetFondDialog({ onRefresh }: NFTDialogProps) {
   const [open, setOpen] = React.useState(false);
+  const [openSuccess, setOpensuccess] = useState(false);
   const { address } = useAccount();
   const { eventId } = useParams();
   const [resultAddress, setResultAddress] = useState("");
@@ -93,6 +95,9 @@ function GetFondDialog({ onRefresh }: NFTDialogProps) {
       console.error("Error:", error);
     }
   };
+  const handleSSClose = () => {
+    setOpensuccess(false);
+  };
   const { config, error } = usePrepareContractWrite({
     address: POOL_FACTORY_ADDRESS as `0x${string}`,
     abi: PoolFactoryABI,
@@ -123,7 +128,8 @@ function GetFondDialog({ onRefresh }: NFTDialogProps) {
           console.log("error");
           console.log(error);
         }
-        console.log("isContractSuccess");
+        setOpensuccess(true)
+        
         await fetch(`/api/myevents/${address}/${eventId}/publish`, {
           method: "PUT",
           body: JSON.stringify({ eventAddress: resultAddress }),
@@ -215,6 +221,15 @@ function GetFondDialog({ onRefresh }: NFTDialogProps) {
           </form>
         </DialogContent>
       </Dialog>
+      <Snackbar
+        open={openSuccess}
+        autoHideDuration={6000}
+        onClose={handleSSClose}
+      >
+        <Alert onClose={handleSSClose} severity="success" sx={{ width: "100%" }}>
+          Publish Success!
+        </Alert>
+      </Snackbar>
     </React.Fragment>
   );
 }
