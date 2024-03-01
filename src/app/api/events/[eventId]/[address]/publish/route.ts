@@ -6,7 +6,13 @@ import { db } from "@/db";
 import { eventsTable, nftsTable } from "@/db/schema";
 import { USD_ADDRESS, NTD_ADDRESS, TAREA_ADDRESS } from "@/utils/addresses";
 
-function metadata(description: string, image: string, name: string, price: number, totalAmount: number) {
+function metadata(
+  description: string,
+  image: string,
+  name: string,
+  price: number,
+  totalAmount: number,
+) {
   return {
     description: description,
     external_url: "",
@@ -65,7 +71,17 @@ export async function GET(
     for (let i = 0; i < nfts.length; i++) {
       uploadJson.push(
         new File(
-          [JSON.stringify(metadata(nfts[i].description, nfts[i].imageSrc, nfts[i].name, nfts[i].price, nfts[i].totalAmount))],
+          [
+            JSON.stringify(
+              metadata(
+                nfts[i].description,
+                nfts[i].imageSrc,
+                nfts[i].name,
+                nfts[i].price,
+                nfts[i].totalAmount,
+              ),
+            ),
+          ],
           `nftCollection/${i}.json`,
           { type: "application/json" },
         ),
@@ -76,25 +92,31 @@ export async function GET(
 
     uploadJson.forEach((file, index) => {
       // Simulate a folder structure by naming the file with a path
-      formData.append('file', file, `nftCollection/${index}.json`);
+      formData.append("file", file, `nftCollection/${index}.json`);
     });
 
     // Add metadata for the upload, including the name or other properties
-    formData.append("pinataMetadata", JSON.stringify({
-      name: "NFT Collection",
-      keyvalues: {
-        collection: "My NFT Collection"
-      }
-    }));
+    formData.append(
+      "pinataMetadata",
+      JSON.stringify({
+        name: "NFT Collection",
+        keyvalues: {
+          collection: "My NFT Collection",
+        },
+      }),
+    );
 
     // Perform the upload to Pinata
-    const response = await fetch("https://api.pinata.cloud/pinning/pinFileToIPFS", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${process.env.PINATA_JWT}`,
+    const response = await fetch(
+      "https://api.pinata.cloud/pinning/pinFileToIPFS",
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${process.env.PINATA_JWT}`,
+        },
+        body: formData,
       },
-      body: formData,
-    });
+    );
     const { IpfsHash } = await response.json();
 
     return NextResponse.json(

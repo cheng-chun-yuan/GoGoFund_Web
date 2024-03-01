@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useRef } from "react";
+
 import Image from "next/image";
 import { useParams } from "next/navigation";
 
@@ -67,7 +68,6 @@ function GetFondDialog({ onRefresh }: NFTDialogProps) {
     if (e.target.files && e.target.files.length > 0) {
       uploadFile(e.target.files[0]);
     }
-
   };
 
   const handleClose = () => {
@@ -267,8 +267,11 @@ function GetFondDialog({ onRefresh }: NFTDialogProps) {
             />
           )}
           <form onSubmit={handleSubmit} className="flex justify-center">
-            <Button type="submit" onClick={handleClose}
-            disabled={cid==="" || cid===undefined}>
+            <Button
+              type="submit"
+              onClick={handleClose}
+              disabled={cid === "" || cid === undefined}
+            >
               Submit
             </Button>
           </form>
