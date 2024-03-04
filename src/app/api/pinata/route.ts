@@ -1,29 +1,6 @@
 // app/api/pinata.ts
 import { NextResponse, type NextRequest } from "next/server";
 
-import pinataSDK from "@pinata/sdk";
-
-const pinata = new pinataSDK(
-  process.env.PINATA_API_KEY || "",
-  process.env.PINATA_SECRET_API_KEY || "",
-);
-
-export async function GET() {
-  try {
-    const testResult = await pinata.testAuthentication();
-    return NextResponse.json(
-      { message: "Authentication successful", testResult },
-      { status: 200 },
-    );
-  } catch (error) {
-    console.error("Pinata authentication failed:", error);
-    return NextResponse.json(
-      { error: "Failed to authenticate with Pinata" },
-      { status: 500 },
-    );
-  }
-}
-
 export async function POST(request: NextRequest) {
   try {
     const data = await request.formData();
