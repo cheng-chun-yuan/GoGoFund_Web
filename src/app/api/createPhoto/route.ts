@@ -83,6 +83,7 @@ export async function POST(req: NextRequest) {
         if (!image.url) {
             return NextResponse.json({ error: "Failed to generate image" }, { status: 500 });
         }
+        const PINATA_JWT = process.env.PINATA_JWT || "";
         const metadataResponse = new File([
               JSON.stringify(
                 metadata(image.url, dogeName, dogeBreed, dogeColor),
@@ -99,7 +100,7 @@ export async function POST(req: NextRequest) {
             {
               method: "POST",
               headers: {
-                Authorization: `Bearer ${process.env.PINATA_JWT}`,
+                Authorization: `Bearer ${PINATA_JWT}`,
               },
               body: formData,
             },
