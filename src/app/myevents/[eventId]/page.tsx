@@ -10,6 +10,7 @@ import EditDescription from "../_components/EditDescription";
 import EditTitle from "../_components/EditTitle";
 import EditValue from "../_components/EditValue";
 import NFTDialog from "../_components/NFTDialog";
+// import GPTDialog from "../_components/GPTDialog";
 import Divider from "@mui/material/Divider";
 
 import type { eventDetailDto } from "@/lib/types/db";
@@ -86,6 +87,7 @@ function MyEventsIdPage() {
             Duration: {startDate} – {endDate}
           </p>
           <NFTDialog onRefresh={refreshData} />
+          {/* <GPTDialog onRefresh={refreshData} /> */}
         </div>
       </div>
       <div className="flex w-[50%] flex-col justify-start p-8">

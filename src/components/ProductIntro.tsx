@@ -3,6 +3,8 @@
 // ProductPage.tsx
 import React, { useState, useEffect } from "react";
 
+import Image from "next/image";
+
 import { Divider } from "@mui/material";
 
 import type { nft } from "@/lib/types/db";
@@ -45,9 +47,18 @@ function ProductIntro({ nfts = [] }: { nfts: nft[] }) {
       <div>
         {selectedProduct ? (
           <div className="pl-2">
-            <p className="break-all p-2 text-xl">
+            <p className="flex justify-start p-2 text-2xl font-bold">
               price : $ {selectedProduct.price}
             </p>
+            <Image
+              src={selectedProduct.imageSrc.replace(
+                "ipfs://",
+                "https://cloudflare-ipfs.com/ipfs/",
+              )}
+              alt="product"
+              width={200}
+              height={200}
+            />
             <p className="break-all p-2 text-xl">
               remain : {selectedProduct.totalAmount - selectedProduct.nowAmount}
             </p>
